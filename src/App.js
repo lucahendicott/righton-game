@@ -1,6 +1,6 @@
 import logo from "./logo.svg";
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, useHistory } from "react-router-dom";
 import "./App.css";
 
 const pagesData = {
@@ -53,6 +53,7 @@ const Join = () => {
   const [pageIndex, setPageIndex] = useState(0);
   const { pages } = pagesData;
   const page = pages[pageIndex];
+  const history = useHistory();
 
   return (
     <div>
@@ -64,7 +65,7 @@ const Join = () => {
         <input type="text" />
         <br />
         <br />
-        <input type="submit" />
+        <input type="submit" onClick={() => history.push("/1")} />
       </form>
     </div>
   );
@@ -108,8 +109,8 @@ function App() {
   return (
     <Router>
       <Route exact path="/" component={Join}></Route>
-      <Route exact path="/1" component={Question}></Route>
-      <Route exact path="/2" component={Scorecard}></Route>
+      <Route path="/1" component={Question}></Route>
+      <Route path="/2" component={Scorecard}></Route>
     </Router>
   );
 }
