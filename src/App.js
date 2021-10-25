@@ -75,8 +75,11 @@ const Question = () => {
   const [pageIndex, setPageIndex] = useState(1);
   const { pages } = pagesData;
   const page = pages[pageIndex];
+  const history = useHistory();
   const answerList = page.data.answers;
-  const answers = answerList.map((answer) => <button>{answer}</button>);
+  const answers = answerList.map((answer) => (
+    <button onClick={() => history.push("/2")}>{answer}</button>
+  ));
   return (
     <div>
       <h1>{page.title}</h1>
