@@ -1,5 +1,6 @@
 import logo from "./logo.svg";
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 
 const pagesData = {
@@ -52,6 +53,7 @@ const Join = () => {
   const [pageIndex, setPageIndex] = useState(0);
   const { pages } = pagesData;
   const page = pages[pageIndex];
+
   return (
     <div>
       <h1>{page.title}</h1>
@@ -104,11 +106,11 @@ const Scorecard = () => {
 
 function App() {
   return (
-    <div>
-      <Join />
-      <Question />
-      <Scorecard />
-    </div>
+    <Router>
+      <Route exact path="/" component={Join}></Route>
+      <Route exact path="/1" component={Question}></Route>
+      <Route exact path="/2" component={Scorecard}></Route>
+    </Router>
   );
 }
 
