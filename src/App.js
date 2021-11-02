@@ -49,61 +49,59 @@ const pagesData = {
   ],
 };
 
-const Join = () => {
-  const [pageIndex, setPageIndex] = useState(0);
-  const { pages } = pagesData;
-  const page = pages[pageIndex];
+const Join = ({ data }) => {
   const history = useHistory();
 
   return (
-    <div>
-      <h1>{page.title}</h1>
-
-      <form>
-        <h3>{page.text}</h3>
-        <p>{page.data.gameCode}</p>
-        <input type="text" />
-        <br />
-        <br />
-        <input type="submit" onClick={() => history.push("/1")} />
-      </form>
-    </div>
+    <form>
+      <p>{data.gameCode}</p>
+      <input type="text" />
+      <br />
+      <br />
+      <input type="submit" onClick={() => history.push("/1")} />
+    </form>
   );
 };
 
-const Question = () => {
-  const [pageIndex, setPageIndex] = useState(1);
-  const { pages } = pagesData;
-  const page = pages[pageIndex];
+const Question = ({ data }) => {
   const history = useHistory();
-  const answerList = page.data.answers;
+  const answerList = data.answers;
   const answers = answerList.map((answer) => (
     <button onClick={() => history.push("/2")}>{answer}</button>
   ));
-  return (
-    <div>
-      <h1>{page.title}</h1>
-      <h3>{page.text}</h3>
-      <ul>{answers}</ul>
-    </div>
-  );
+
+  return <ul>{answers}</ul>;
 };
 
-const Scorecard = () => {
-  const [pageIndex, setPageIndex] = useState(2);
-  const { pages } = pagesData;
-  const page = pages[pageIndex];
-  const scoreList = page.data.scores;
+const Scorecard = ({ data }) => {
+  const scoreList = data.scores;
   const scores = scoreList.map((score) => (
     <li>
       {score.teamName}: {score.teamScore}
     </li>
   ));
+
+  return <ul>{scores}</ul>;
+};
+
+const PageMap = {
+  0: Join,
+  1: Question,
+  2: Scorecard,
+};
+
+const PageProvider = ({ match }) => {
+  const { params } = match;
+  const { pages } = pagesData;
+  const page = pages[params.pageIndex];
+
+  const PageComponent = PageMap[params.pageIndex];
+
   return (
     <div>
       <h1>{page.title}</h1>
       <h3>{page.text}</h3>
-      <ul>{scores}</ul>
+      <PageComponent data={page.data} />
     </div>
   );
 };
@@ -111,9 +109,7 @@ const Scorecard = () => {
 function App() {
   return (
     <Router>
-      <Route exact path="/" component={Join}></Route>
-      <Route path="/1" component={Question}></Route>
-      <Route path="/2" component={Scorecard}></Route>
+      <Route path="/:pageIndex" component={PageProvider}></Route>
     </Router>
   );
 }
